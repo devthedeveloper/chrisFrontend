@@ -1,0 +1,28 @@
+<div class="main-content">
+  <!-- content area part -->
+  <section class="caregivers-section register-frm">
+    <div class="container">
+      <div class="row">
+        <div class="caregivers-inner col-md-6">
+          <div class="left-block">
+            <h2 class="text-center">
+              {{ 'Congratulations!' | translate }} <br />
+              {{ 'Your account is now activated' | translate }}
+            </h2>
+            <p class="text-center">
+              {{ 'Please login to complete the profile. We will show your profile online after this is completed.' | translate }}
+            </p>
+            <div class="reg-frm">
+              <p class="text-center">
+                <a href="javascript:void(0);" (click)="redirection()">{{
+                  'LOGIN' | translate
+                }}</a>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="right-image" style="background-image: url(assets/images/caregiver-image.jpg);"></div>
+      </div>
+    </div>
+  </section>
+</div>
