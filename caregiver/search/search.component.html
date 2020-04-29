@@ -1,0 +1,518 @@
+<div class="main-content">
+  <!-- content area part -->
+  <section class="search-results-section">
+    <div class="title-blocks">
+      <h1>{{ 'You may select up to 3 Caregivers' | translate }}</h1>
+      <p>
+        {{
+          'The first caregiver to accept will provide services to you'
+            | translate
+        }}
+      </p>
+    </div>
+    <div class="top-sort-block">
+      <div class="transport-block">
+        <label
+          >Transport Subsidy
+          <a
+            class="tool-tip"
+            href="javascript:void(0);"
+            data-placement="top"
+            data-toggle="tooltip"
+            title="Transport Subsidy"
+            ><img src="assets/images/tooltip-icon.svg" alt=""/></a
+        ></label>
+        <input type="text" placeholder="Optional" />
+        <input type="submit" value="Add" />
+      </div>
+      <div class="sort-block">
+        <label>Sort by:</label>
+        <div class="single-block">
+          <label>Price</label>
+          <select
+            class="form-control"
+            name="sortPrice"
+            (change)="changeSorting($event, 'price')"
+          >
+            <option value="">Please Select</option>
+            <option value="desc">High to low</option>
+            <option value="asc">Low to High</option>
+          </select>
+        </div>
+        <div class="single-block">
+          <label>Experience</label>
+          <select
+            class="form-control"
+            class="form-control"
+            name="sortExperience"
+            (change)="changeSorting($event, 'experience')"
+          >
+            <option value="">Please Select</option>
+            <option value="desc">High to low</option>
+            <option value="asc">Low to High</option>
+          </select>
+        </div>
+        <div class="single-block">
+          <label>Ratings</label>
+          <select
+            class="form-control"
+            name="sortRatings"
+            (change)="changeSorting($event, 'feedback')"
+          >
+            <option value="">Please Select</option>
+            <option value="desc">High to low</option>
+            <option value="asc">Low to High</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="search-result-inner">
+      <div class="left-block">
+        <div class="left-inner">
+          <form
+            class="search-form"
+            [formGroup]="caregiverSearchForm"
+            (ngSubmit)="caregiverSearch()"
+          >
+            <div
+              class="form-group search"
+              [ngClass]="{
+                'error-msg':
+                  caregiverSearchForm.controls['registration_no'].errors
+              }"
+            >
+              <label>{{ 'Search by Caregiver Number' | translate }}</label>
+              <input
+                type="number"
+                formControlName="registration_no"
+                class="form-control search"
+                placeholder="500"
+                (change)="searchInputChanged($event, 'registration_no')"
+              />
+              <app-control-message
+                fieldName="{{ 'Registration Number' | translate }}"
+                [control]="caregiverSearchForm.controls['registration_no']"
+              ></app-control-message>
+            </div>
+            <div class="form-group">
+              <label>Caregiver Type</label>
+              <select
+                class="form-control"
+                formControlName="caregiver_type"
+                (change)="searchInputChanged($event, 'caregiver_type')"
+              >
+                <option value="">Select caregiver type</option>
+                <option
+                  value="{{ type.id }}"
+                  *ngFor="let type of careGiverType"
+                  >{{ type.name }}</option
+                >
+              </select>
+            </div>
+            <div class="form-group" *ngIf="servicesArray.length > 0">
+              <label>Select Services</label>
+
+              <angular2-multiselect
+                [data]="servicesArray"
+                (onSelect)="onItemSelect($event)"
+                (onDeSelect)="OnItemDeSelect($event)"
+                formControlName="services"
+                [settings]="settingsServices"
+                class="form-control multiselect-form"
+              >
+              </angular2-multiselect>
+              <!-- <angular2-multiselect [data]="servicesArray" formControlName="services" [settings]="settingsServices">
+              </angular2-multiselect> -->
+              <!-- <select class="form-control" multiple formControlName="services"
+                (change)="searchInputChanged($event, 'services')">
+                <option value="">Select service from...</option>
+                <option value="{{ service.id }}" *ngFor="let service of servicesArray">{{ service.english_title }}
+                </option>
+              </select> -->
+            </div>
+            <div class="form-group">
+              <label>Residental area</label>
+              <select
+                class="form-control"
+                formControlName="location_id"
+                (change)="searchInputChanged($event, 'location_id')"
+              >
+                <option value="">Select Residental area</option>
+                <option
+                  value="{{ location.id }}"
+                  *ngFor="let location of locationList"
+                  >{{ location.name }}</option
+                >
+              </select>
+            </div>
+            <div class="form-group date">
+              <label>Date</label>
+              <input
+                type="text"
+                class="form-control date"
+                formControlName="date"
+                ngbDatepicker
+                #d="ngbDatepicker"
+                (dateSelect)="searchInputChanged($event, 'date')"
+                (click)="d.toggle()"
+                [maxDate]="maxDate"
+                placeholder="{{ 'Select Date' | translate }}"
+              />
+            </div>
+            <div class="form-group">
+              <label>{{ 'Start Time' | translate }}</label>
+              <div class="single-date-input ">
+                <input
+                  type="number"
+                  formControlName="start_time"
+                  (change)="searchInputChanged($event, 'start_time')"
+                  class="form-control"
+                  placeholder="10"
+                />
+                <select
+                  class="form-control"
+                  (change)="searchInputChanged($event, 'start_meridian')"
+                  formControlName="start_meridian"
+                >
+                  <option value="AM">AM</option>
+                  <option value="PM">PM</option>
+                </select>
+                <app-control-message
+                  fieldName="{{ 'Start Time' | translate }}"
+                  [control]="caregiverSearchForm.controls['start_time']"
+                ></app-control-message>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>End Time</label>
+              <div class="single-date-input">
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="end_time"
+                  (change)="searchInputChanged($event, 'end_time')"
+                  placeholder="10"
+                />
+                <select
+                  class="form-control"
+                  (change)="searchInputChanged($event, 'end_meridian')"
+                  formControlName="end_meridian"
+                >
+                  <option value="AM">AM</option>
+                  <option value="PM">PM</option>
+                </select>
+                <app-control-message
+                  fieldName="{{ 'End Time' | translate }}"
+                  [control]="caregiverSearchForm.controls['end_time']"
+                ></app-control-message>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Minimum Years of Experience</label>
+              <select
+                class="form-control"
+                formControlName="min_exp"
+                (change)="searchInputChanged($event, 'min_exp')"
+              >
+                <option value="">Select Experience</option>
+                <option
+                  value="{{ years }}"
+                  *ngFor="let years of experienceYears"
+                  >{{ years }}</option
+                >
+              </select>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="right-block" *ngIf="caregiverList.length > 0">
+        <div class="listing-main-block">
+          <div class="msg-block" *ngIf="showSelectedError">
+            {{
+              'You seem to have selected quite a few services, please ensure the caregiver has enough time to help out!'
+                | translate
+            }}
+          </div>
+          <div class="listing-block">
+            <div
+              class="single-listing"
+              *ngFor="let caregiver of caregiverList; let i = index"
+            >
+              <span class="number">{{ i + 1 }}</span>
+              <div class="single-inner">
+                <div class="left-list">
+                  <div class="left-list-inner">
+                    <div class="register-data">
+                      <div class="single-register">
+                        <strong>Registered Name</strong>
+                        <p>
+                          <a
+                            href="javascript:void(0)"
+                            routerLink="/pages/caregiver/profile-view/overview/{{
+                              caregiver.registration_no
+                            }}"
+                            target="_blank"
+                            >{{ caregiver.english_name | translate }}</a
+                          >
+                        </p>
+                      </div>
+                      <div class="single-register">
+                        <strong>Registered No.</strong>
+                        <p>
+                          <a
+                            href="javascript:void(0)"
+                            target="_blank"
+                            routerLink="/pages/caregiver/profile-view/overview/{{
+                              caregiver.registration_no
+                            }}"
+                            >{{ caregiver.registration_no | translate }}</a
+                          >
+                        </p>
+                      </div>
+                    </div>
+                    <div class="rate-data">
+                      <i class="fa fa-star fill" aria-hidden="true"></i>
+                      <i class="fa fa-star fill" aria-hidden="true"></i>
+                      <i class="fa fa-star fill" aria-hidden="true"></i>
+                      <i class="fa fa-star fill" aria-hidden="true"></i>
+                      <i class="fa fa-star fill" aria-hidden="true"></i>
+                      <a href="#">(20 Reviews)</a>
+                    </div>
+                    <div class="emp-data">
+                      <p>
+                        {{ caregiver.prev_exp | translate }}
+                        {{ 'year(s) exp' | translate }} |
+                        <img src="assets/images/overview-icon.svg" alt=" " />
+                      </p>
+                      <p *ngIf="caregiver.employer.length > 0">
+                        Employer Details:
+                        <a
+                          href="javascript:void(0);"
+                          (click)="open(content, caregiver)"
+                          >Click here</a
+                        >
+                      </p>
+                      <p *ngIf="caregiver.education.length > 0">
+                        Education Details:
+                        <a
+                          href="javascript:void(0);"
+                          (click)="openEducation(education, caregiver)"
+                          >Click here</a
+                        >
+                      </p>
+                      <!-- <p>
+                        ABC Univercity, Master of Science in Nursing 2006 - 2009
+                      </p> -->
+                    </div>
+                  </div>
+                  <div class="select-check">
+                    <div class="custom-checkbox">
+                      <input
+                        [disabled]="caregiver.disabled"
+                        id="caregiver_selector_{{ i }}"
+                        type="checkbox"
+                        name="caregiver_selector_{{ i }}"
+                        value="{{ caregiver.id }}"
+                        class="form-check-input"
+                        (change)="selectCaregiver($event)"
+                      />
+                      <label for="caregiver_selector_{{ i }}"
+                        >Select this caregiver</label
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="right-list">
+                  <div class="right-list-inner">
+                    <div class="single-list">
+                      <div class="single-list-inner">
+                        <strong>Price Per hour:</strong>
+                        <span>${{ caregiver.chargesObject.price }}</span>
+                      </div>
+                    </div>
+                    <div class="single-list">
+                      <div class="single-list-inner">
+                        <strong>Total Hours:</strong>
+                        <span>{{ caregiver.chargesObject.hour }}</span>
+                      </div>
+                    </div>
+                    <div class="single-list">
+                      <div class="single-list-inner">
+                        <strong>Service Fees:</strong>
+                        <span>${{ caregiverServiceFee }}</span>
+                      </div>
+                      <small>Free during promotion!</small>
+                    </div>
+                  </div>
+                  <div class="total-list">
+                    <div class="single-list">
+                      <div class="single-list-inner">
+                        <strong>Total Amount</strong>
+                        <span>${{ caregiver.chargesObject.totalAmount }}</span>
+                      </div>
+                      <small>(With Transport Subsidy)</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="load-more-btn" *ngIf="callMoreApi === true">
+          <a href="javascript:void(0)" (click)="loadMore()" class="btn"
+            >Load More <img src="assets/images/load-more-icon.svg"
+          /></a>
+        </div>
+      </div>
+      <div class="right-block" *ngIf="caregiverList.length == 0">
+        <div class="no-caregiver">
+          <p>No Caregiver Found</p>
+        </div>
+      </div>
+    </div>
+    <div class="booking-block" *ngIf="showBookBlock">
+      <a href="javascript:void(0);" (click)="bookCaregiver()" class="btn"
+        >Book Caregiver <img src="assets/images/user-icon.svg" alt=""
+      /></a>
+    </div>
+  </section>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Employer Details</h4>
+    <a href="javascript:void(0);" (click)="modal.dismiss('Cross click')"
+      ><img src="assets/images/close-black-icon.svg" alt=""
+    /></a>
+  </div>
+  <div class="modal-body">
+    <div class="single-page-block">
+      <h4>Current Employer</h4>
+      <p>
+        {{ employerDetailsToShow?.currentEmployer?.name }},
+        <br />
+        <ng-container
+          *ngIf="employerDetailsToShow?.currentEmployer?.work_type === '1'"
+          >Full time</ng-container
+        >
+        <ng-container
+          *ngIf="employerDetailsToShow?.currentEmployer?.work_type === '2'"
+          >Part time</ng-container
+        >, <br />{{ employerDetailsToShow?.currentEmployer?.from_year }} -
+        Present <br />{{
+          employerDetailsToShow?.currentEmployer?.yearsExperience
+        }}
+        Years,
+        {{ employerDetailsToShow?.currentEmployer?.monthsExperience }}
+        Months
+      </p>
+      <h4 *ngIf="employerDetailsToShow.previousEmployer.length > 0">
+        Previous Employer
+      </h4>
+      <div *ngIf="employerDetailsToShow.previousEmployer.length > 0">
+        <ng-container
+          *ngFor="let previous of employerDetailsToShow.previousEmployer"
+        >
+          <p>
+            {{ previous?.name }},
+            <br />
+            <ng-container *ngIf="previous?.work_type === '1'"
+              >Full time</ng-container
+            >
+            <ng-container *ngIf="previous?.work_type === '2'"
+              >Part time</ng-container
+            >, <br />{{ previous?.from_year }} - {{ previous?.to_year }}<br />{{
+              previous?.yearsExperience
+            }}
+            Years, {{ previous?.monthsExperience }} Months
+          </p>
+          <hr />
+        </ng-container>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Employer Details</h4>
+    <button
+      type="button"
+      class="close"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-12">
+        <strong>Current Employer</strong>
+        <div class="inner-div">
+          <p>{{ employerDetailsToShow?.currentEmployer?.name }}</p>
+          <p *ngIf="employerDetailsToShow?.currentEmployer?.work_type === '1'">
+            Full Time
+          </p>
+          <p *ngIf="employerDetailsToShow?.currentEmployer?.work_type === '2'">
+            Part Time
+          </p>
+          <p>
+            {{ employerDetailsToShow?.currentEmployer?.from_year }} - Present
+          </p>
+          <p>
+            {{ employerDetailsToShow?.currentEmployer?.yearsExperience }} Years,
+            {{ employerDetailsToShow?.currentEmployer?.monthsExperience }}
+            Months
+          </p>
+        </div>
+      </div>
+      <div
+        class="col-md-12"
+        *ngIf="employerDetailsToShow.previousEmployer.length > 0"
+      >
+        <strong>Previous Employer</strong>
+        <div
+          class="inner-div"
+          style="border-top: 2px solid black;"
+          *ngFor="let previous of employerDetailsToShow.previousEmployer"
+        >
+          <p>{{ previous?.name }}</p>
+          <p *ngIf="previous?.work_type === '1'">
+            Full Time
+          </p>
+          <p *ngIf="previous?.work_type === '2'">
+            Part Time
+          </p>
+
+          <p>{{ previous?.from_year }} - {{ previous?.to_year }}</p>
+          <p>
+            {{ previous?.yearsExperience }} Years,
+            {{ previous?.monthsExperience }} Months
+          </p>
+        </div>
+      </div>
+    </div>
+  </div> -->
+</ng-template>
+
+<ng-template #education let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Education Details</h4>
+    <a href="javascript:void(0);" (click)="modal.dismiss('Cross click')"
+      ><img src="assets/images/close-black-icon.svg" alt=""
+    /></a>
+  </div>
+  <div class="modal-body">
+    <div class="single-page-block">
+      <div *ngIf="educationDetailsToShow.length > 0">
+        <ng-container *ngFor="let education of educationDetailsToShow">
+          <p>
+            {{ education?.institute_name }},<br />
+            {{ education?.degree }},<br />
+            {{ education?.start_year }}
+            - {{ education?.end_year }}<br />
+          </p>
+          <hr />
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</ng-template>

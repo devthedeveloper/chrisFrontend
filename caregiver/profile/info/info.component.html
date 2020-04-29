@@ -1,0 +1,73 @@
+<div
+  id="panel-B"
+  class="card tab-pane fade show active"
+  role="tabpanel"
+  aria-labelledby="info"
+>
+  <div class="card-header" role="tab" id="heading-B">
+    <h5 class="mb-0">
+      <a
+        class="collapsed"
+        data-toggle="collapse"
+        href="#collapse-B"
+        aria-expanded="false"
+        aria-controls="collapse-B"
+      >
+        {{ 'Info' | translate }}
+      </a>
+    </h5>
+  </div>
+  <div
+    id="collapse-B"
+    class="collapse show"
+    data-parent="#content"
+    role="tabpanel"
+    aria-labelledby="heading-B"
+  >
+    <div class="single-profile-page">
+      <div class="single-page-block">
+        <h4>{{ 'Skills' | translate }}</h4>
+        <strong>{{ 'Personal Care' | translate }}</strong>
+
+        <ul *ngFor="let care of personalCareArray">
+          <li>-{{ care }}</li>
+        </ul>
+        <hr />
+        <strong>{{ 'Special Care' | translate }}</strong>
+        <ul *ngFor="let care of specialCareArray">
+          <li>-{{ care }}</li>
+        </ul>
+        <h4>{{ 'Current Employer' | translate }}</h4>
+        <p *ngIf="!showCurrentEmployerEmpty">
+          {{ currentEmployer.name }}, <br />
+          {{ workType[currentEmployer.work_type] }}{{ ',' | translate }}<br />{{
+            currentEmployer.from_year
+          }}
+          {{ '- Present' | translate }}<br />
+          <span *ngIf="currentEmployerSpanYear > 0"
+            >{{ currentEmployerSpanYear }} {{ 'years' | translate }}</span
+          >
+          <span *ngIf="currentEmployerSpanMonth > 0"
+            >{{ currentEmployerSpanMonth }} {{ 'months' | translate }}</span
+          >
+          <span *ngIf="currentEmployerSpanDays > 0"
+            >{{ currentEmployerSpanDays }} {{ 'days' | translate }}</span
+          >
+        </p>
+        <h4>Previous Employer</h4>
+        <div *ngFor="let employer of previousEmployerArray; let i = index">
+          <p>
+            {{ employer.name }},<br />
+            {{ workType[employer.work_type - 1] }},<br />{{
+              employer.from_year
+            }}
+            - {{ employer.to_year }}<br />
+
+            {{ previousEmployerYearSpan[i] }} {{ 'years' | translate }}
+          </p>
+          <hr />
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

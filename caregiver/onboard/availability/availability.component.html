@@ -1,0 +1,340 @@
+<div
+  id="panel-D"
+  class="card tab-pane fade show active"
+  role="tabpanel"
+  aria-labelledby="availability"
+>
+  <div class="card-header" role="tab" id="heading-D">
+    <h5 class="mb-0">
+      <a
+        class="collapsed"
+        data-toggle="collapse"
+        href="#collapse-D"
+        aria-expanded="false"
+        aria-controls="collapse-D"
+      >
+        {{ 'Availability' | translate }}
+      </a>
+    </h5>
+  </div>
+  <div
+    id="collapse-D"
+    class="collapse show"
+    role="tabpanel"
+    data-parent="#content"
+    aria-labelledby="heading-D"
+  >
+    <form [formGroup]="availabiltyForm" (ngSubmit)="addAvailability()">
+      <div class="single-wizard">
+        <div class="wizard-form">
+          <div class="title-block">
+            <h5>
+              {{
+                'Have questions about this form? Please whatsapp' | translate
+              }}
+              <a href="tel:12345678">{{ '1234 5678' | translate }}</a>
+              {{ 'and let us help you!' | translate }}
+            </h5>
+            <h4>{{ 'Step 4' | translate }}</h4>
+            <h3>{{ 'Your Availability' | translate }}</h3>
+            <p>
+              {{
+                'Clients can find you according to your availability.'
+                  | translate
+              }}
+            </p>
+          </div>
+          <div class="form-blocks">
+            <div class="single-form-block">
+              <div class="single-main-block">
+                <div
+                  class="single-block time-block"
+                  formArrayName="availability_details"
+                  *ngFor="
+                    let item of availabiltyForm.get('availability_details')[
+                      'controls'
+                    ];
+                    let i = index
+                  "
+                >
+                  <ng-container [formGroupName]="i">
+                    <div class="form-group">
+                      <div class="form-group">
+                        <label>{{ 'Day From' | translate }}</label>
+                        <select class="form-control" formControlName="from_day">
+                          <option
+                            value="{{ day.id }}"
+                            *ngFor="let day of daysArray"
+                            >{{ day.name | translate }}</option
+                          >
+                        </select>
+                        <app-control-message
+                          fieldName="{{ 'Day From' | translate }}"
+                          [control]="
+                            availabiltyForm.get('availability_details')[
+                              'controls'
+                            ][i].controls['from_day']
+                          "
+                        ></app-control-message>
+                        <app-control-message
+                          fieldName="{{ 'Availability Details' | translate }}"
+                          [control]="
+                            availabiltyForm.get('availability_details')
+                          "
+                        ></app-control-message>
+                      </div>
+                      <div class="form-group">
+                        <label>{{ 'Day To' | translate }} </label>
+                        <select class="form-control" formControlName="to_day">
+                          <option
+                            value="{{ day.id }}"
+                            *ngFor="let day of daysArray"
+                            >{{ day.name | translate }}</option
+                          >
+                        </select>
+                        <app-control-message
+                          fieldName="{{ 'Day To' | translate }}"
+                          [control]="
+                            availabiltyForm.get('availability_details')[
+                              'controls'
+                            ][i].controls['to_day']
+                          "
+                        ></app-control-message>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <div class="form-group">
+                        <label> {{ 'Time From' | translate }} </label>
+                        <div class="single-date-input">
+                          <input
+                            type="number"
+                            class="form-control"
+                            formControlName="from_time"
+                            placeholder="{{ '5' | translate }}"
+                          />
+                          <select
+                            class="form-control"
+                            formControlName="from_meridian"
+                          >
+                            <option value="AM">{{ 'AM' | translate }}</option>
+                            <option value="PM">{{ 'PM' | translate }}</option>
+                          </select>
+                          <app-control-message
+                            fieldName="{{ 'Time From' | translate }}"
+                            [control]="
+                              availabiltyForm.get('availability_details')[
+                                'controls'
+                              ][i].controls['from_time']
+                            "
+                          ></app-control-message>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label>{{ 'Time To' | translate }}</label>
+                        <div class="single-date-input">
+                          <input
+                            type="number"
+                            class="form-control"
+                            formControlName="to_time"
+                            placeholder="{{ '5' | translate }}"
+                          />
+                          <select
+                            class="form-control"
+                            formControlName="to_meridian"
+                          >
+                            <option value="AM">{{ 'AM' | translate }}</option>
+                            <option value="PM">{{ 'PM' | translate }}</option>
+                          </select>
+                          <app-control-message
+                            fieldName="{{ 'Time To' | translate }}"
+                            [control]="
+                              availabiltyForm.get('availability_details')[
+                                'controls'
+                              ][i].controls['to_time']
+                            "
+                          ></app-control-message>
+                        </div>
+                      </div>
+                    </div>
+                    <a
+                      href="javascript:void(0)"
+                      *ngIf="
+                        availabiltyForm.get('availability_details')['controls']
+                          .length > 1
+                      "
+                      (click)="removeAvailability(i)"
+                      class="remove-icon"
+                      ><img
+                        src="assets/images/close-black-icon.svg"
+                        alt="Remove"
+                    /></a>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="add-btn">
+                <a
+                  href="javascript:void(0);"
+                  (click)="addAvailabilityOptions()"
+                  class="btn btn-border"
+                  >{{ 'Add another Availability' | translate }}</a
+                >
+              </div>
+            </div>
+            <div class="single-form-block">
+              <div class="skill-block">
+                <label
+                  >{{ 'Locations' | translate }}
+                  <span
+                    >({{
+                      'Places that are willing to go. Please select 5 max.'
+                        | translate
+                    }})</span
+                  ></label
+                >
+                <div class="skill-main">
+                  <div class="single-skill location-block">
+                    <div class="single-skill-inner">
+                      <ng-container
+                        *ngFor="
+                          let location of availabiltyForm.get('locations')[
+                            'controls'
+                          ];
+                          let i = index
+                        "
+                        [formGroup]="location"
+                      >
+                        <label class="label-title"
+                          >{{ location.get('name').value | translate }}
+                        </label>
+                        <ul>
+                          <li
+                            *ngFor="
+                              let subLocation of availabiltyForm.get(
+                                'locations'
+                              )['controls'][i].controls.subGroup.controls;
+                              let j = index
+                            "
+                            [formGroup]="subLocation"
+                          >
+                            <div class="custom-checkbox">
+                              <input
+                                id="subLocation_{{ i }}_{{ j }}"
+                                type="checkbox"
+                                [formControl]="subLocation.get('selected')"
+                                class="form-check-input"
+                              />
+                              <label for="subLocation_{{ i }}_{{ j }}">
+                                {{ subLocation.get('name').value | translate }}
+                              </label>
+                            </div>
+                          </li>
+                        </ul>
+                      </ng-container>
+
+                      <!-- <label class="label-title">{{
+                        'Kowloon' | translate
+                      }}</label>
+                      <ul>
+                        <li>
+                          <div class="custom-checkbox">
+                            <input
+                              id="l5"
+                              type="checkbox"
+                              class="form-check-input"
+                            />
+                            <label for="l5">{{
+                              'Sham Shu Po' | translate
+                            }}</label>
+                          </div>
+                        </li>
+                        <li>
+                          <div class="custom-checkbox">
+                            <input
+                              id="l6"
+                              type="checkbox"
+                              class="form-check-input"
+                            />
+                            <label for="l6">{{
+                              'Kowloon City' | translate
+                            }}</label>
+                          </div>
+                        </li>
+                        <li>
+                          <div class="custom-checkbox">
+                            <input
+                              id="l7"
+                              type="checkbox"
+                              class="form-check-input"
+                            />
+                            <label for="l7">{{
+                              'Kowloon City' | translate
+                            }}</label>
+                          </div>
+                        </li>
+                        <li>
+                          <div class="custom-checkbox">
+                            <input
+                              id="l8"
+                              type="checkbox"
+                              class="form-check-input"
+                            />
+                            <label for="l8">{{
+                              'Kowloon City' | translate
+                            }}</label>
+                          </div>
+                        </li>
+                        <li>
+                          <div class="custom-checkbox">
+                            <input
+                              id="l5"
+                              type="checkbox"
+                              class="form-check-input"
+                            />
+                            <label for="l5">{{
+                              'Sham Shu Po' | translate
+                            }}</label>
+                          </div>
+                        </li>
+                        <li>
+                          <div class="custom-checkbox">
+                            <input
+                              id="l6"
+                              type="checkbox"
+                              class="form-check-input"
+                            />
+                            <label for="l6">{{
+                              'Kowloon City' | translate
+                            }}</label>
+                          </div>
+                        </li>
+                      </ul> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="btn-block" *ngIf="!profileMode">
+            <a
+              href="javascript:void(0);"
+              [routerLink]="['/caregiver/onboard/skillset']"
+              class="btn"
+              >{{ 'Previous' | translate }}
+              <img src="assets/images/left-arrow.svg" alt=" "
+            /></a>
+            <button type="submit" class="btn">
+              {{ 'Next' | translate }}
+              <img src="assets/images/right-arrow.svg" alt=" " />
+            </button>
+          </div>
+          <div class="btn-block" *ngIf="profileMode">
+            <button type="submit" class="btn">
+              {{ 'Save' | translate }}
+              <img src="assets/images/down-arrow-icon.svg" alt=" " />
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

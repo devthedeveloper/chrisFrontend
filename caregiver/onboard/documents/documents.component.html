@@ -1,0 +1,152 @@
+<div
+  id="panel-F"
+  class="card tab-pane fade show active "
+  role="tabpanel"
+  aria-labelledby="documents"
+>
+  <div class="card-header" role="tab" id="heading-F">
+    <h5 class="mb-0">
+      <a
+        class="collapsed"
+        data-toggle="collapse show"
+        href="#collapse-F"
+        aria-expanded="false"
+        aria-controls="collapse-F"
+      >
+        {{ 'Documents' | translate }}
+      </a>
+    </h5>
+  </div>
+  <div
+    id="collapse-F"
+    class="collapse"
+    role="tabpanel"
+    data-parent="#content"
+    aria-labelledby="heading-F"
+  >
+    <div class="single-wizard">
+      <div class="wizard-form">
+        <div class="title-block">
+          <h5>
+            {{ 'Have questions about this form? Please whatsapp' | translate }}
+            <a href="tel:12345678">{{ '1234 5678' | translate }}</a>
+            {{ 'and let us help you!' | translate }}
+          </h5>
+          <h4>{{ 'Step 6' | translate }}</h4>
+          <h3>{{ 'Email or whatsapp your douments' | translate }}</h3>
+          <p>
+            {{
+              'All documents given to us are strictly confidential and are only used for registeration purposes'
+                | translate
+            }}
+          </p>
+        </div>
+        <div class="content-block documents-block">
+          <p>
+            {{
+              'Please email or whatsapp the following to XXX@XXX.com or XXXX XXXX. We will process your registeration in 24 hours after we receive all of your documents.'
+                | translate
+            }}
+          </p>
+          <p>
+            {{
+              'If you email us, the subject headline should be ‘Name and Mobile’ (e.g. Chan Tai Man 5402 9351).'
+                | translate
+            }}
+          </p>
+          <h5>{{ 'Hong Kong Identity Card' | translate }}</h5>
+          <h5>
+            {{
+              'Proof of present address issues less than 3 months (bank / credit card statement, utility / mobile phone bill)'
+                | translate
+            }}
+          </h5>
+          <h5>{{ 'RN / EN:' | translate }}</h5>
+          <ul>
+            <li>
+              {{ '- A Certificate of Registeration (Part 1)' | translate }}
+            </li>
+            <li>
+              {{
+                '- A valid Practicing Certificate issued by the Nursing Council of Hong Kong'
+                  | translate
+              }}
+            </li>
+          </ul>
+          <p>{{ 'HW:' | translate }}</p>
+          <ul>
+            <li>
+              {{
+                '- Health Worker Training Courses approved by the Director of Social Welfare'
+                  | translate
+              }}
+              <br />
+              <a
+                href="https://www.swd.gov.hk/storage/asset/section/2923/en/hwtc201907(2).pdf"
+                target="_blank"
+                >https://www.swd.gov.hk/storage/asset/section/2923/en/hwtc201907(2).pdf</a
+              >
+            </li>
+          </ul>
+          <p>{{ 'PCW:' | translate }}</p>
+          <ul>
+            <li>
+              {{
+                '- Personal Care Worker certificate issued by an accredited institution in Hong Kong'
+                  | translate
+              }}
+            </li>
+            <li>{{ '- Out-Patient Escort:' | translate }}</li>
+            <li>
+              {{ '- Out-Patient Escort Foundation Certificate OR' | translate }}
+            </li>
+            <li>
+              {{
+                '- Elderly Caregiver Foundation Certificate issued by an accredited institution in Hong Kong'
+                  | translate
+              }}
+            </li>
+          </ul>
+          <p>
+            {{
+              'If you have first-aid, occupational therapy / physiotherapy assitant certificates, please send us too.'
+                | translate
+            }}
+          </p>
+          <h5>{{ 'Payslips or Employment Contracts' | translate }}</h5>
+          <small
+            >({{
+              'Regardless of whether you would like to show your current / previous employer names'
+                | translate
+            }}).</small
+          >
+          <ul>
+            <li>
+              {{
+                '- Payslips: First and last payslips in current AND previous employers OR'
+                  | translate
+              }}
+            </li>
+            <li>
+              {{ '- Current and previous Employment Contract(s)' | translate }}
+            </li>
+          </ul>
+          <p>{{ 'We will not contact your employer(s)' | translate }}</p>
+        </div>
+        <div class="btn-block">
+          <a
+            href="javascript:void(0);"
+            (click)="redirectionPrevious()"
+            class="btn"
+            >{{ 'Previous' | translate }}
+            <img src="assets/images/left-arrow.svg" alt=" "
+          /></a>
+          <a href="javascript:void(0);" (click)="redirection()" class="btn"
+            >{{ 'Next' | translate }}
+            <img src="assets/images/right-arrow.svg" alt=" "
+          /></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
